@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Viernes 13</title>
+    <style>
+        :root {
+            --cursorX: 50vw;
+            --cursorY: 50vh;
+        }
+
+        body {
+            margin: 0;
+            height: 100vh;
+            background-color: #050505;
+            color: white;
+            font-family: 'Courier New', Courier, monospace;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            cursor: none;
+        }
+
+        /* Efecto Linterna */
+        body::before {
+            content: '';
+            display: block;
+            width: 100%;
+            height: 100%;
+            position: fixed;
+            pointer-events: none;
+            background: radial-gradient(
+                circle 150px at var(--cursorX) var(--cursorY),
+                rgba(255, 255, 255, 0.05) 0%, 
+                rgba(0,0,0,0.98) 100%
+            );
+            z-index: 10;
+        }
+
+        .container {
+            text-align: center;
+            max-width: 450px;
+            z-index: 5;
+            padding: 20px;
+        }
+
+        h1 {
+            font-size: 3rem;
+            color: #8b0000;
+            text-transform: uppercase;
+            letter-spacing: 8px;
+            margin-bottom: 20px;
+        }
+
+        .message-box {
+            opacity: 0;
+            transition: opacity 1.5s ease;
+        }
+
+        .visible {
+            opacity: 1 !important;
+        }
+
+        p {
+            font-size: 1.2rem;
+            line-height: 1.8;
+            color: #ccc;
+        }
+
+        .highlight {
+            color: #ff4d4d;
+            font-weight: bold;
+        }
+
+        /* Botón de música */
+        #music-btn {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: rgba(139, 0, 0, 0.6);
+            padding: 10px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            z-index: 20;
+            font-size: 0.8rem;
+            border: 1px solid #8b0000;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="music-btn" onclick="controlMusica()">presione aca primero: OFF</div>
+
+    <audio id="cancion" loop>
+        <source src="viernes13.mp3" type="audio/mpeg">
+    </audio>
+
+    <div class="container">
+        <h1>Viernes 13</h1>
+        <div class="message-box" id="content">
+            <p>Muchos dicen que hoy es un día maldito,<br>que solo trae mala suerte...</p>
+            <p>Pero que suerte poder conocerte.</p>
+            <p class="highlight">Te quiero mucho Marianita </p>
+            <p style="margin-top: 30px; font-size: 3.5rem; letter-spacing: 10px;">💗</p>
+        </div>
+    </div>
+
+    <script>
+        const content = document.getElementById('content');
+        const audio = document.getElementById('cancion');
+        const btn = document.getElementById('music-btn');
+
+        // Función para encender/apagar música
+        function controlMusica() {
+            if (audio.paused) {
+                audio.play().then(() => {
+                    btn.innerText = "Presione aca para pausar: ON";
+                }).catch(err => {
+                    console.log("Error al reproducir: ", err);
+                });
+            } else {
+                audio.pause();
+                btn.innerText = "Presione aca primero: OFF";
+            }
+        }
+
+        // Seguimiento de linterna
+        document.addEventListener('mousemove', (e) => {
+            document.documentElement.style.setProperty('--cursorX', e.clientX + 'px');
+            document.documentElement.style.setProperty('--cursorY', e.clientY + 'px');
+            content.classList.add('visible');
+        });
+
+        // Soporte para celulares
+        document.addEventListener('touchmove', (e) => {
+            document.documentElement.style.setProperty('--cursorX', e.touches[0].clientX + 'px');
+            document.documentElement.style.setProperty('--cursorY', e.touches[0].clientY + 'px');
+            content.classList.add('visible');
+        });
+    </script>
+</body>
+</html>
