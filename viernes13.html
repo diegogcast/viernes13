@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Viernes 13...❤️</title>
+    <style>
+        :root {
+            --cursorX: 50vw;
+            --cursorY: 50vh;
+        }
+
+        body {
+            margin: 0;
+            height: 100vh;
+            background-color: #050505; /* Negro total */
+            color: white;
+            font-family: 'Courier New', Courier, monospace;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            cursor: none; /* Escondemos el cursor real */
+        }
+
+        /* Capa de la linterna */
+        body::before {
+            content: '';
+            display: block;
+            width: 100%;
+            height: 100%;
+            position: fixed;
+            pointer-events: none;
+            /* El círculo que ilumina */
+            background: radial-gradient(
+                circle 120px at var(--cursorX) var(--cursorY),
+                rgba(211, 47, 47, 0.2) 0%, 
+                rgba(0,0,0,0.99) 100%
+            );
+            z-index: 10;
+        }
+
+        .container {
+            text-align: center;
+            max-width: 500px;
+            z-index: 5;
+            padding: 20px;
+        }
+
+        h1 {
+            font-size: 3rem;
+            color: #8b0000; /* Rojo sangre */
+            text-transform: uppercase;
+            letter-spacing: 8px;
+            margin-bottom: 20px;
+            text-shadow: 0 0 15px rgba(139, 0, 0, 0.7);
+        }
+
+        .message-box {
+            opacity: 0;
+            transition: opacity 1s ease-in;
+        }
+
+        /* Cuando la linterna activa el mensaje */
+        .visible {
+            opacity: 1 !important;
+        }
+
+        p {
+            font-size: 1.2rem;
+            line-height: 1.8;
+            color: #bbb;
+        }
+
+        .highlight {
+            color: #ff4d4d;
+            font-weight: bold;
+            text-shadow: 0 0 10px rgba(255, 77, 77, 0.5);
+        }
+
+        /* Pétalos rojos oscuros cayendo */
+        .petal {
+            position: absolute;
+            background-color: #4b0000;
+            width: 10px;
+            height: 10px;
+            border-radius: 50% 0 50% 0;
+            pointer-events: none;
+            animation: fall linear forwards;
+        }
+
+        @keyframes fall {
+            to { transform: translateY(110vh) rotate(720deg); }
+        }
+
+        /* Control de música */
+        #music-btn {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            z-index: 100;
+            cursor: pointer;
+            background: rgba(139, 0, 0, 0.3);
+            border: 1px solid #8b0000;
+            color: white;
+            padding: 10px 15px;
+            border-radius: 5px;
+            font-size: 12px;
+            text-transform: uppercase;
+        }
+    </style>
+</head>
+<body>
+
+    <audio id="cancion" loop>
+        <source src="viernes13.mp3" type="audio/mpeg">
+    </audio>
+
+    <div id="music-btn" onclick="controlMusica()">Música: OFF</div>
+
+    <div class="container">
+        <h1>Viernes 13</h1>
+        
+        <div class="message-box" id="content">
+            <p>Muchos dicen que hoy es un día maldito,<br> que solo trae mala suerte...</p>
+            <p>Pero que suerte poder conocerte</p>
+            <p class="highlight"><br> Te quiero mucho </p>
+            <p style="margin-top: 30px; font-size: 0.9rem; letter-spacing: 5px;">🌹</p>
+        </div>
+    </div>
+
+    <script>
+        const content = document.getElementById('content');
+        const audio = document.getElementById('cancion');
+        const btn = document.getElementById('music-btn');
+
+        // Seguimiento de linterna
+        document.addEventListener('mousemove', e => {
+            document.documentElement.style.setProperty('--cursorX', e.clientX + 'px');
+            document.documentElement.style.setProperty('--cursorY', e.clientY + 'px');
+            
+            // Revelar mensaje
+            content.classList.add('visible');
+            
+            // Intento de auto-play al primer movimiento
+            audio.play().then(() => {
+                btn.innerText = "Música: ON";
+            }).catch(() => {});
+        });
+
+        // Soporte para móviles (toque)
+        document.addEventListener('touchmove', e => {
+            const touch = e.touches[0];
+            document.documentElement.style.setProperty('--cursorX', touch.clientX + 'px');
+            document.documentElement.style.setProperty('--cursorY', touch.clientY + 'px');
+            content.classList.add('visible');
+        });
+
+        function controlMusica() {
+            if (audio.paused) {
+                audio.play();
+                btn.innerText = "Música: ON";
+            } else {
+                audio.pause();
+                btn.innerText = "Música: OFF";
+            }
+        }
+
+        // Generador de pétalos oscuros
+        function spawnPetal() {
+            const petal = document.createElement('div');
+            petal.className = 'petal';
+            petal.style.left = Math.random() * 100 + 'vw';
+            petal.style.opacity = Math.random() * 0.7 + 0.3;
+            
+            const duration = Math.random() * 4 + 4;
+            petal.style.animationDuration = duration + 's';
+            
+            document.body.appendChild(petal);
+            setTimeout(() => petal.remove(), duration * 1000);
+        }
+
+        setInterval(spawnPetal, 300);
+    </script>
+</body>
+</html>
